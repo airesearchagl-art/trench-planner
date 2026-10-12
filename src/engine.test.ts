@@ -50,7 +50,7 @@ it('刻み境界・ちょうど成立・落差ゼロを扱う', () => {
 it('JSON往復、未知の版、不正値、重複ID、色を検証する', () => {
   const p = preset(); expect(parseProject(serializeProject(p))).toEqual(p);
   expect(() => parseProject('{')).toThrow();
-  expect(() => validateProject({ ...p, version: 2 })).toThrow();
+  expect(() => validateProject({ ...p, version: 99 })).toThrow();
   p.routes[0].segments[0].slopeDenominator = 0; expect(() => validateProject(p)).toThrow();
   p.routes[0].segments[0].slopeDenominator = NaN; expect(() => validateProject(p)).toThrow();
   const q = preset(); q.routes.push(structuredClone(q.routes[0])); expect(() => validateProject(q)).toThrow();
