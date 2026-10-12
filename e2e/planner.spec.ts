@@ -27,7 +27,7 @@ test('混合勾配・断面更新・出力の根拠が一致する', async ({ pa
   await page.locator('#view-route').selectOption('route-2');
   await page.locator('#view-slab').selectOption('planned');
   await expect(page.locator('svg').first().getByText('D 363',{exact:true})).toBeVisible();
-  await expect(page.locator('svg').nth(1).getByText('水上 D=43',{exact:true})).toBeVisible();
+  await expect(page.locator('.profile svg').getByText('水上 D=43',{exact:true})).toBeVisible();
   await page.locator('.export-menu summary').click();
   const svgDownload = page.waitForEvent('download'); await page.getByRole('button',{name:'模式図 SVG'}).click();
   const svg=await fs.readFile((await (await svgDownload).path())!, 'utf8'); expect(svg).toContain('図示スラブ下げ 450 mm'); expect(svg).toContain('D 363');
