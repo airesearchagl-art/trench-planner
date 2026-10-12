@@ -1,10 +1,17 @@
 # 公開構成
 
-- GitHub：`airesearchagl-art/trench-planner`（初期はPrivate）
+- GitHub：`airesearchagl-art/trench-planner`（Public。2026-10-13に利用者指定で公開へ変更）
+- 公開URL：https://trench-planner.vercel.app/
 - Vercelチーム：`airesearchagl's projects` / `airesearchagls-projects`
 - プロジェクト：`trench-planner`
 - フレームワーク：Vite、出力：dist、ビルド：npm run build
 - サーバー・DB・APIキー：不要
+
+## 初回公開の確認
+
+2026-10-13（JST）にGit連携を設定し、ProductionのREADYと公開URLのHTTP 200を確認。初版のコミット `a0168b8` で、下膳室見直し案300mm・調理室混合勾配案450mm・GT2箇所一律1/50案400mmを公開画面上でも再現し、ブラウザエラーは0件だった。
+
+初回作成ツールの案内はPreviewだったが、実際のデプロイ情報はProduction。運用上の現在値は実際のデプロイ情報を正とする。
 
 ## 手順
 
