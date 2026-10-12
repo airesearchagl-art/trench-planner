@@ -1,0 +1,61 @@
+import { test, expect } from '@playwright/test';
+import fs from 'node:fs/promises';
+
+test('初期案 → 施工余裕 → 必要下げ → JSON保存 → 再読込', async ({ page }) => {
+  const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
+  await page.goto('/');
+  await expect(page.getByTestId('common-slab')).toHaveText('300mm');
+  await expect(page.getByTestId('margin')).toHaveText('3mm');
+  await page.getByLabel('施工余裕', { exact: true }).fill('10'); await page.getByLabel('施工余裕', { exact: true }).press('Tab');
+  await expect(page.getByTestId('common-slab')).toHaveText('350mm');
+  await expect(page.getByTestId('margin')).toHaveText('-7mm');
+  await page.reload(); await expect(page.getByTestId('common-slab')).toHaveText('350mm');
+  const pending = page.waitForEvent('download'); await page.getByRole('button', { name: 'JSONで保存', exact: true }).click();
+  const dl = await pending; const json=JSON.parse(await fs.readFile((await dl.path())!, 'utf8'));
+  expect(json.section.reserveMm).toBe(10); expect(json.routes[0].segments[0].lengthM).toBe(8.5);
+  json.section.reserveMm=0; json.routes[0].segments[0].lengthM=8.65;
+  await page.locator('#file-input').setInputFiles({ name:'settings.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(json)) });
+  await expect(page.getByTestId('margin')).toHaveText('0mm');
+  await expect(page.getByTestId('common-slab')).toHaveText('300mm');
+  expect(errors).toEqual([]);
+});
+test('混合勾配・断面更新・出力の根拠が一致する', async ({ page }) => {
+  page.on('dialog', d=>d.accept()); await page.goto('/');
+  await page.locator('#preset-select').selectOption('kitchen-mixed');
+  await expect(page.getByTestId('common-slab')).toHaveText('450mm');
+  await expect(page.getByTestId('margin')).toHaveText('-147mm');
+  await page.locator('#view-route').selectOption('route-2');
+  await page.locator('#view-slab').selectOption('planned');
+  await expect(page.locator('svg').first().getByText('D 363',{exact:true})).toBeVisible();
+  await expect(page.locator('svg').nth(1).getByText('水上 D=43',{exact:true})).toBeVisible();
+  await page.locator('.export-menu summary').click();
+  const svgDownload = page.waitForEvent('download'); await page.getByRole('button',{name:'模式図 SVG'}).click();
+  const svg=await fs.readFile((await (await svgDownload).path())!, 'utf8'); expect(svg).toContain('図示スラブ下げ 450 mm'); expect(svg).toContain('D 363');
+  const promptDownload=page.waitForEvent('download');await page.getByRole('button',{name:'スライド作成プロンプト'}).click();
+  const prompt=await fs.readFile((await (await promptDownload).path())!,'utf8');expect(prompt).toContain('必要落差320mm');expect(prompt).toContain('共通採用下げ：450mm');
+});
+test('不正入力は結果を停止し、不正JSONは既存設定を壊さない', async({ page })=>{
+  await page.goto('/');
+  await page.getByLabel('下膳室ルート 区間1 勾配分母',{exact:true}).fill('0');
+  await page.getByLabel('下膳室ルート 区間1 勾配分母',{exact:true}).press('Tab');
+  await expect(page.getByRole('alert')).toContainText('勾配分母');
+  await expect(page.getByRole('button',{name:'JSONで保存',exact:true})).toBeDisabled();
+  await expect(page.locator('svg')).toHaveCount(0);
+  await page.getByLabel('下膳室ルート 区間1 勾配分母',{exact:true}).fill('50');
+  await page.getByLabel('下膳室ルート 区間1 勾配分母',{exact:true}).press('Tab');
+  await page.locator('#file-input').setInputFiles({name:'bad.json',mimeType:'application/json',buffer:Buffer.from('{"version":99}')});
+  await expect(page.getByRole('status')).toContainText('現在の設定は保持');
+  await expect(page.getByTestId('common-slab')).toHaveText('300mm');
+});
+test('画面幅・逆算・PDF用レイアウト', async({ page },testInfo)=>{
+  await page.goto('/');
+  await page.locator('.inverse summary').click();
+  await expect(page.locator('#max-length')).toHaveText('8.65 m');
+  await page.locator('#inverse-den').fill('100');await page.locator('#inverse-den').press('Tab');
+  await expect(page.locator('#max-length')).toHaveText('17.3 m');
+  await page.screenshot({path:testInfo.outputPath('desktop.png'),fullPage:true});
+  await page.pdf({path:testInfo.outputPath('report.pdf'),preferCSSPageSize:true,printBackground:true});
+  await page.setViewportSize({width:390,height:844});
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({path:testInfo.outputPath('mobile.png'),fullPage:true});
+});
