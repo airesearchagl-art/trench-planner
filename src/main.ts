@@ -71,7 +71,7 @@ function render() {
   if (!project.routes.some(x => x.id === selected)) selected = project.routes[0].id;
   app.innerHTML = `
     <header class="topbar no-print"><a class="brand" href="#"><span class="brand-icon" aria-hidden="true">≋</span><span>側溝プランナー<small>TRENCH PLANNER</small></span></a><span class="version">M1 · 0.2</span>
-      <div class="toolbar"><button data-action="import">JSONを読込</button><button data-action="json" ${r ? '' : 'disabled'}>JSONで保存</button><details class="export-menu"><summary>資料を出力</summary><div><button data-action="svg" ${r ? '' : 'disabled'}>模式図 SVG</button><button data-action="prompt" ${r ? '' : 'disabled'}>スライド作成プロンプト</button><button data-action="print" ${r ? '' : 'disabled'}>印刷 / PDF保存</button></div></details></div>
+      <div class="toolbar"><a class="manual-link" href="/manual.html" target="_blank" rel="noopener" aria-label="使い方（別タブで開く）">使い方 <span aria-hidden="true">↗</span></a><button data-action="import">JSONを読込</button><button data-action="json" ${r ? '' : 'disabled'}>JSONで保存</button><details class="export-menu"><summary>資料を出力</summary><div><button data-action="svg" ${r ? '' : 'disabled'}>模式図 SVG</button><button data-action="prompt" ${r ? '' : 'disabled'}>スライド作成プロンプト</button><button data-action="print" ${r ? '' : 'disabled'}>印刷 / PDF保存</button></div></details></div>
     </header>
     <div class="workspace-title"><div><p class="eyebrow">厨房側溝の高さ・勾配検討</p><h1>条件を変えて、断面の納まりを確かめる。</h1></div><p class="local-note no-print">入力はこのブラウザ内に保存<br>共有・引継ぎはJSONで</p></div>
     <div id="notice" role="status" class="notice ${notice ? '' : 'hidden'}">${esc(notice)}</div>

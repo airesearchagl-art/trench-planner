@@ -26,6 +26,7 @@ test('調理室・下膳室の9案を画面とJSON往復で確認',async({page})
 test('入力直後の保存ボタンが1クリックで動く',async({page})=>{
   await page.goto('/');await page.getByLabel('現状スラブ下げ S',{exact:true}).fill('350');
   await page.getByLabel('現状スラブ下げ S',{exact:true}).press('Tab');
+  await expect(page.getByTestId('available')).toHaveText('223mm');
   await expect(page.getByLabel('施工余裕',{exact:true})).toBeFocused();
   await page.getByLabel('施工余裕',{exact:true}).fill('10');
   const button=page.getByRole('button',{name:'JSONで保存',exact:true});const box=(await button.boundingBox())!;

@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="側溝プランナーの使い方。実際の画面で、断面の鍵、勾配・距離・スラブ下げの逆算、PDF図面計測、JSON保存と資料出力を説明します。" />
+  <meta name="theme-color" content="#243b36" />
+  <title>使い方 | 側溝プランナー</title>
+  <link rel="stylesheet" href="/src/manual.css" />
+</head>
+<body>
+  <a class="skip-link" href="#content">本文へ移動</a>
+  <header class="guide-header"><a class="guide-brand" href="/">≋ <span>側溝プランナー<small>TRENCH PLANNER</small></span></a><span class="guide-label">使い方ガイド</span><a class="app-link" href="/">アプリを開く ↗</a></header>
+  <div class="guide-layout">
+    <nav class="contents" aria-label="マニュアルの目次">
+      <p>このページの内容</p>
+      <a href="#start"><span>01</span>まずは1案を検証</a>
+      <a href="#screen"><span>02</span>画面の見方</a>
+      <a href="#section"><span>03</span>断面寸法と鍵</a>
+      <a href="#routes"><span>04</span>ルート・区間を設定</a>
+      <a href="#inverse"><span>05</span>固定条件から逆算</a>
+      <a href="#drawing"><span>06</span>図面から距離を測る</a>
+      <a href="#export"><span>07</span>保存・資料出力</a>
+      <a href="#help"><span>08</span>困ったとき</a>
+      <div class="nav-note">M1 / v0.2 対応 · 更新：2026年10月13日<br>画面は説明用の検討例です。</div>
+    </nav>
+    <main id="content">
+      <div class="guide-hero">
+        <p class="eyebrow">OPERATION GUIDE</p>
+        <h1>条件を入れる。<br>断面で確かめる。</h1>
+        <p class="lead">側溝の距離・勾配から、必要なスラブ下げを検討するための操作ガイドです。実際の画面の番号と、操作説明を対応させています。</p>
+        <div class="hero-links"><a href="#start">初めて使う →</a><a href="#drawing">図面を測りたい →</a><a href="#inverse">逆算したい →</a></div>
+        <p class="quiet">トップ画面の「使い方」から別タブで開きます。入力中のアプリを横に並べて参照できます。</p>
+      </div>
+
+      <section id="start" class="chapter">
+        <div class="chapter-heading"><span>01</span><div><p>QUICK START</p><h2>まずは1案を検証する</h2></div></div>
+        <p>下膳室の例を使い、入力から判定までを確認します。数値を変更したら、<strong>Tabキーを押すか、別の欄をクリック</strong>すると結果に反映されます。</p>
+        <ol class="steps">
+          <li><strong>左上「今回の検討例を読込」で「下膳室廻り｜勾配・ルート見直し案」を選ぶ。</strong><p>現在の入力を例に置き換えます。作業中の案は、先に右上の「JSONで保存」で残してください。</p></li>
+          <li><strong>スラブ下げ300mm、施工余裕0mm、距離8.5m、勾配分母50を確認。</strong><p>勾配欄には <b>50</b> と入力すると 1/50 です。高さはmm、経路の距離はmで入力します。</p></li>
+          <li><strong>右側の結果を確認。</strong><p>必要落差170mmに対して使用可能173mm。「現在の下げで成立」となり、残余は3mmです。</p></li>
+          <li><strong>試しに「施工余裕」を10mmへ変更。</strong><p>使用可能落差は163mm、残余は−7mm、共通採用スラブ下げは350mmに変わります。確認後、施工余裕を0mmへ戻します。</p></li>
+        </ol>
+        <div class="example-result"><div><small>使用可能落差</small><strong>173 <em>mm</em></strong></div><div><small>8.5m × 1/50の必要落差</small><strong>170 <em>mm</em></strong></div><div><small>残余</small><strong>3 <em>mm</em></strong></div></div>
+        <p class="note">「成立」は入力した高さ条件の判定です。残余3mmの例では、実経路長と施工余裕の妥当性を確認してください。</p>
+      </section>
+
+      <section id="screen" class="chapter">
+        <div class="chapter-heading"><span>02</span><div><p>SCREEN MAP</p><h2>左で設定し、右で結果を見る</h2></div></div>
+        <figure><a href="/manual/screen.png" target="_blank" rel="noopener" aria-label="画面全体の操作位置を拡大（別タブ）"><img src="/manual/screen.png" width="1440" height="1180" alt="実際のトップ画面。1は検討条件、2はルート入力、3は判定と結果、4は図示条件、5は保存・出力。" /></a><figcaption>画像をクリックすると別タブで拡大できます。画面を下へ進むと図面計測が現れます。</figcaption></figure>
+        <div class="guide-cards">
+          <article><h3><b class="pin">1</b> 検討条件</h3><p>現状スラブ下げ、施工余裕、逆算の対象を指定します。初期寸法のままなら、詳細設定を開く必要はありません。</p></article>
+          <article><h3><b class="pin">2</b> ルート・区間</h3><p>水上側から排水先までの距離と勾配を入力します。途中で勾配が変わるときは区間を追加します。</p></article>
+          <article><h3><b class="pin">3</b> 判定・一覧</h3><p>現在の下げでの残余と、全ルートが納まる共通採用スラブ下げを確認します。最も必要落差が大きいルートがクリティカルです。</p></article>
+          <article><h3><b class="pin">4</b> 図示条件</h3><p>「図示ルート」と「図示する下げ」を選びます。「必要下げを反映」は図の表示切替で、左の現状スラブ下げは変えません。</p></article>
+          <article><h3><b class="pin">5</b> 保存・出力</h3><p>設定を残すならJSON。図や資料に使うなら「資料を出力」を選びます。</p></article>
+        </div>
+        <p class="note">「共通採用スラブ下げ」が350mmでも、現状Sが300mmのままなら残余は300mmを基準に表示します。必要下げの提案と、現在条件の判定を併せて確認できます。</p>
+      </section>
+
+      <section id="section" class="chapter">
+        <div class="chapter-heading"><span>03</span><div><p>SECTION &amp; LOCKS</p><h2>断面図の鍵を外して、製品寸法を変更</h2></div></div>
+        <figure><a href="/manual/section.png" target="_blank" rel="noopener" aria-label="断面図の操作位置を拡大（別タブ）"><img src="/manual/section.png" loading="lazy" width="949" height="576" alt="実際の断面図。右側に4つの寸法と鍵。右下にスラブ下げの固定・自動算定切替。" /></a><figcaption>マゼンタは深さD・最小クリアランス・許容落差。番号1〜4の鍵は寸法の編集保護です。</figcaption></figure>
+        <div class="table-wrap"><table><thead><tr><th>位置</th><th>寸法・初期値</th><th>操作と変化</th></tr></thead><tbody>
+          <tr><td><b class="pin">1</b></td><th>FLから天端まで：20mm</th><td>鍵をクリックして解除 → 数値を変更。大きくすると、勾配に使える高さが減ります。</td></tr>
+          <tr><td><b class="pin">2</b></td><th>グレーチング厚：35mm</th><td>製品の厚さに変更。厚くすると、勾配に使える高さが減ります。</td></tr>
+          <tr><td><b class="pin">3</b></td><th>最小下面クリアランス：50mm</th><td>グレーチング下面から最浅部の底までの確保寸法。大きくすると、勾配に使える高さが減ります。</td></tr>
+          <tr><td><b class="pin">4</b></td><th>スラブから底面まで：22mm</th><td>底部の仕上げ等の厚さに変更。厚くすると、勾配に使える高さが減ります。</td></tr>
+          <tr><td><b class="pin">5</b></td><th>スラブ下げS：300mm</th><td>鍵を解除すると、距離・勾配から必要Sを自動算定。再度固定すると、その時点のSを入力値として維持します。</td></tr>
+        </tbody></table></div>
+        <p><strong>寸法1〜4は、解除しても自動で値を求めません。</strong>手入力を可能にする鍵です。変更後は再度鍵をかけて、その値を保護できます。Sの鍵だけは、固定と自動算定を切り替えます。</p>
+        <div class="formula-box"><strong>初期断面の読み方</strong><p>最大深さ D＝300 − 20 − 35 − 10 − 22＝<b>213mm</b><br>最浅部 D＝50 − 10＝<b>40mm</b><br>許容落差＝213 − 40＝<b>173mm</b></p><p>10mmはグレーチング下面とD表示基準の差です。50mmの確保寸法とは測り始めが異なり、落差から重ねて差し引きません。</p></div>
+        <p class="quiet">「断面・製品寸法を変更」ではD基準差、下げ寸法の刻み（初期50mm）、側溝幅も指定できます。幅は図示用です。グレーチング天端は一定とし、経路勾配は側溝底に付けます。床から側溝への収水勾配とは別です。</p>
+      </section>
+
+      <section id="routes" class="chapter">
+        <div class="chapter-heading"><span>04</span><div><p>ROUTES &amp; SEGMENTS</p><h2>勾配が変わる場所で区間を分ける</h2></div></div>
+        <ol class="steps">
+          <li><strong>別の水上地点からの経路は「＋ ルート」で追加。</strong><p>ルート名と色を指定します。各ルートは接続先GTまでの経路として独立して計算します。</p></li>
+          <li><strong>同じ経路の途中で条件が変わる場合は「＋ 区間を追加」。</strong><p>区間を水上側から排水先へ順に並べ、各区間の距離と勾配分母を入力します。1/100なら100、1/50なら50です。</p></li>
+          <li><strong>ルート名の左の「●」か「図示ルート」で図を切り替える。</strong><p>縦断図と区間別計算が選択ルートに変わります。全体の判定は引き続き全ルートが対象です。</p></li>
+        </ol>
+        <div class="route-example"><span>水上</span><div><strong>提供カウンター内</strong><small>12m / 1/200 → 60mm</small></div><span>→</span><div><strong>調理室内</strong><small>8.85m / 1/100 → 88.5mm</small></div><span>GT</span></div>
+        <p class="quiet">例：ルート①の合計は20.85m、必要落差148.5mm。分母が小さいほど急勾配になり、必要落差が増えます。</p>
+        <p class="note">GT数を1→2に変えるだけでは、経路は短くなりません。計画情報としてGT数を変えた上で、各GTまでの実経路長も入力し直してください。</p>
+      </section>
+
+      <section id="inverse" class="chapter">
+        <div class="chapter-heading"><span>05</span><div><p>INVERSE CALCULATION</p><h2>変えたい値を1つ選び、ほかを固定する</h2></div></div>
+        <div class="split-content"><figure><a href="/manual/solver.png" target="_blank" rel="noopener" aria-label="逆算の選択欄を拡大（別タブ）"><img src="/manual/solver.png" loading="lazy" width="315" height="275" alt="固定する条件と求める値、逆算ルート、自動算定する区間の3つの選択欄。" /></a><figcaption>左側「検討条件」内。勾配・距離を求めるときは対象ルートと区間も選びます。</figcaption></figure><div><p>「固定する条件と求める値」で逆算モードを選ぶと、求める項目が自動計算になり、直接の手入力はできなくなります。</p><p>手入力に戻すときは「入力値を固定して検証」を選びます。自動計算で得た数値は、そのまま残ります。</p><p class="note">区間勾配・距離の逆算は、選んだ1区間だけが対象です。ほかの区間やルートの値は変わらないため、最後に全ルートの判定も確認します。</p></div></div>
+        <div class="table-wrap"><table><thead><tr><th>選ぶモード</th><th>固定する値</th><th>得られる結果・例</th></tr></thead><tbody>
+          <tr><th>入力値を固定して検証</th><td>S・距離・勾配</td><b>現状を変えずに必要下げを比較。</b>8.5m・1/50・S300で残余3mm。</td></tr>
+          <tr><th>スラブ下げを求める</th><td>全ルートの距離・勾配</td><b>全ルートが納まる最小S。</b>20.85m・一律1/100ならS350mm（50mm刻み）。</td></tr>
+          <tr><th>勾配を求める</th><td>S・対象区間の距離・ほかの区間</td><b>対象区間で取れる最大勾配。</b>14mの1区間・S300なら1/81。分母を整数の緩い側へ切り上げます。</td></tr>
+          <tr><th>距離を求める</th><td>S・対象区間の勾配・ほかの区間</td><b>対象区間の最大距離。</b>1/50の1区間・S300なら8.65m。施工余裕10mmなら8.15m。</td></tr>
+        </tbody></table></div>
+        <p class="quiet">例は初期断面・施工余裕0mm（記載のあるものを除く）です。Sの自動算定は現在値より浅くなる場合もあります。現状Sを維持して比較する場合は「入力値を固定して検証」を使います。</p>
+        <p><strong>参考値だけを見たいとき：</strong>画面下部の「逆算する：取れる勾配・最大延長」を開きます。こちらの結果は、ルートの入力値には反映されません。</p>
+      </section>
+
+      <section id="drawing" class="chapter">
+        <div class="chapter-heading"><span>06</span><div><p>DRAWING MEASUREMENT</p><h2>図面上に折れ線を引き、距離を反映する</h2></div></div>
+        <p>画面下の「図面からルートを測る」を使います。まず対象ルート・区間を作り、その区間の距離を図面から計測します。</p>
+        <figure><a href="/manual/drawing.png" target="_blank" rel="noopener" aria-label="図面計測の操作位置を拡大（別タブ）"><img src="/manual/drawing.png" loading="lazy" width="993" height="1036" alt="説明用図面を読み込んだ実画面。1は図面読込、2は縮尺設定、3は作図対象、4は折れ線作図、5は距離に反映、6は図面出力。" /></a><figcaption>説明用の架空図面です。マゼンタの破線は縮尺の基準、黄緑の線は下膳室ルートです。</figcaption></figure>
+        <ol class="steps numbered">
+          <li><strong>「PDF・画像を読込」で図面を選ぶ。</strong><p>PDF・PNG・JPEGに対応。複数ページのPDFではページ番号を指定し、「ページを変更」で切り替えます。図面がある場合、ボタンは「図面を差替え」です。</p></li>
+          <li><strong>「① 縮尺の2点を指定」→ 既知寸法の両端をクリック。</strong><p>「2点間の実距離」に<b>m単位</b>で入力し、「縮尺を確定」を押します。図面の4,000mmなら<b>4</b>です。紙面の縮尺1/100を入力する欄ではありません。</p></li>
+          <li><strong>「作図ルート」「作図区間」を選ぶ。</strong><p>勾配が変わる地点で区間を分けます。各区間の勾配は、左の「ルート・区間」で設定します。</p></li>
+          <li><strong>「② 折れ線を描く」→ 水上から排水先へ順にクリック。</strong><p>始点・曲がり角・終点をクリックします。「1点戻す」で最後の点を取り消せます。対象区間を描き直す場合も同じボタンから始めます。</p></li>
+          <li><strong>「③ 距離に反映」で確定する。</strong><p>選んだ区間の距離が置き換わり、必要落差・スラブ下げが再計算されます。次の区間も3〜5を繰り返します。<b>「作図終了」は未確定の線を取り消す操作</b>なので、確定には「③ 距離に反映」を使います。</p></li>
+          <li><strong>「図面＋計算結果 SVG」で結果を出力する。</strong><p>背景図面、確定した折れ線、各ルートの距離・必要落差・採用下げをまとめて保存できます。続きの編集用にはJSONも保存します。</p></li>
+        </ol>
+        <div class="guide-cards">
+          <article><h3>計測精度を確認する</h3><p>長めの既知寸法で縮尺を設定し、別の既知寸法でも計測値を照合します。クリック位置は表示倍率を上げて確認できます。倍率の変更自体は計測距離を変えません。</p></article>
+          <article><h3>計測した距離を手入力に戻す</h3><p>左の区間欄に出る「手入力に戻す」を押します。その区間の折れ線が外れ、計測値を残したまま距離を編集・逆算できるようになります。</p></article>
+        </div>
+        <p class="note">縮尺を設定し直すと、すべての作図済み区間が再計算されます。図面・ページの差替えでは縮尺と折れ線を解除し、計測済みの距離は手入力値として残します。</p>
+        <p class="quiet">現在は1ページの画像上で計測します（入力30MBまで、画像化は長辺最大2,400px）。スナップやCAD線の自動取得には未対応です。DXF・DWGは今後の対応対象です。細部が読めない場合は、必要な範囲を切り出した図面で校正し直してください。</p>
+      </section>
+
+      <section id="export" class="chapter">
+        <div class="chapter-heading"><span>07</span><div><p>SAVE &amp; EXPORT</p><h2>編集を残すならJSON、説明に使うなら図とPDF</h2></div></div>
+        <div class="table-wrap"><table><thead><tr><th>したいこと</th><th>押す場所</th><th>保存・出力される内容</th></tr></thead><tbody>
+          <tr><th>続きから編集・別のPCに渡す</th><td>右上「JSONで保存」</td>断面、全ルート、鍵、逆算設定、図面の選択ページ画像、縮尺、確定した折れ線。別環境では「JSONを読込」で復元します。</td></tr>
+          <tr><th>断面・縦断図を資料に貼る</th><td>「資料を出力」→「模式図 SVG」</td>選択中の図示ルートと図示する下げを反映した図。出力前に「現在／必要下げを反映」を確認します。</td></tr>
+          <tr><th>計測した図面を渡す</th><td>図面欄「図面＋計算結果 SVG」</td>背景図面と確定経路、全ルートの結果。手入力区間は線にならず、図上計測した区間数で区別します。</td></tr>
+          <tr><th>簡単な検討資料をPDFにする</th><td>「資料を出力」→「印刷 / PDF保存」</td>ブラウザの印刷画面で保存先をPDFにし、A4横で保存。現在案の結果と選択ルートの模式図、読込済みなら図面も含みます。</td></tr>
+          <tr><th>PowerPointを別途作成する</th><td>「資料を出力」→「スライド作成プロンプト」</td>計算根拠と資料構成の指示文。出力したJSON・SVGと一緒に資料作成環境へ渡します。PPTXファイル自体は本ツールでは生成しません。</td></tr>
+        </tbody></table></div>
+        <p><strong>案を比較する前には、案ごとにJSONを保存。</strong>現在は1案ずつ編集するため、「検討名」を「当初案」「GT2箇所案」などに分けて保存すると、復元しやすくなります。</p>
+        <p class="note">自動保存は同じURL・同じブラウザ内だけです。別のPCへの引継ぎやバックアップにはJSONを使ってください。JSONには元の複数ページPDFではなく、選択した1ページの画像を含みます。再読込後に別ページを選ぶときは、元のPDFを読み込み直します。</p>
+        <p class="quiet">入力・図面はブラウザ内で処理します。共有は保存したファイルを渡す方式です。JSONの読込に失敗した場合は、現在の設定を保持して理由を表示します。</p>
+      </section>
+
+      <section id="help" class="chapter">
+        <div class="chapter-heading"><span>08</span><div><p>HELP</p><h2>操作で迷ったとき</h2></div></div>
+        <details><summary>数値の欄がグレーで、変更できない</summary><p>断面4寸法は図の鍵を解除します。S・勾配・距離が自動算定中なら「入力値を固定して検証」へ戻します。図面計測の距離は、その区間の「手入力に戻す」で保護を解除します。</p></details>
+        <details><summary>「落差を使い切っている」と表示され、逆算できない</summary><p>ほかの区間だけで使用可能落差を超えています。Sを深くする、ほかの区間の距離・勾配を見直す、または「スラブ下げを求める」に切り替えて必要量を確認します。</p></details>
+        <details><summary>図面の「② 折れ線を描く」が押せない</summary><p>縮尺が未設定です。「① 縮尺の2点を指定」で2点と実距離を指定し、「縮尺を確定」を押します。距離に反映するには、折れ線にも2点以上が必要です。</p></details>
+        <details><summary>描いた線が保存されない・区間を変えると消える</summary><p>未確定の線は保存対象外です。区間を切り替える前に「③ 距離に反映」で確定してください。「作図終了」は未確定の線を取り消します。</p></details>
+        <details><summary>断面を「必要下げを反映」にしたのに判定が変わらない</summary><p>その選択は表示だけを切り替えます。実際のSを変更するには左の現状スラブ下げを入力するか、「スラブ下げを求める」を選びます。</p></details>
+        <details><summary>「現在の下げで成立」なら、そのまま設計採用できるか</summary><p>ここで確認するのは側溝の高さ条件です。流量・流速・必要な衛生勾配・GT本体や接続口の高さ・合流部の段差・構造計画は別途確認します。例の勾配は今回の検討値で、一般基準を示すものではありません。</p></details>
+        <details><summary>誤った案や検討例を読み込んでしまった</summary><p>先に保存したJSONを「JSONを読込」で復元します。アプリには履歴からの取り消し機能がないため、例の読込や図面差替えの前にJSONを残してください。</p></details>
+        <a class="bottom-link" href="/">側溝プランナーを開く →</a>
+      </section>
+      <footer class="guide-footer">側溝プランナー / Trench Planner · 使い方ガイド <a href="#content">ページ上部へ ↑</a></footer>
+    </main>
+  </div>
+</body>
+</html>
