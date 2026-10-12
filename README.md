@@ -2,6 +2,8 @@
 
 厨房側溝の区間別勾配と必要スラブ下げを検討する、ブラウザ内で動く設計補助ツールです。Vite + TypeScriptによる静的サイトとしてGitHubからVercelへ配信します。
 
+[アプリを開く](https://trench-planner.vercel.app/) · [使い方ガイド（実画面付き）](https://trench-planner.vercel.app/manual.html)
+
 ## 現在の機能
 
 - 断面図の鍵を解除して天端20・厚35・最小50・底部22mmを変更
@@ -50,6 +52,7 @@ Windowsのブラウザ検証はインストール済みEdgeを使用します。
 - [JSON仕様](docs/JSON_FORMAT.md)
 - [公開手順](docs/DEPLOYMENT.md)
 - [M1の使い方と検証](docs/M1.md)
+- [使い方ページの原稿](manual.html)：トップの「使い方」から別タブで表示。開発画面を起動後、`node scripts/capture-manual.mjs` で説明用の架空データから4枚の実画面を再撮影できます。
 
 ## 参照
 
